@@ -194,3 +194,5 @@ This is an MVP version with basic security. For production use, consider:
 ## License
 
 This project is for educational purposes. Feel free to modify and use as needed.
+
+#### This F**king Shit is Made By Cursor "just promting no manual coding".
