@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Platform - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .form-toggle {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .form-toggle a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .form-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .user-type-selector {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-type-option {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .user-type-option:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+
+        .user-type-option:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .user-type-option.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Educational Platform</h1>
+            <p>Login to your account</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" name="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <div class="form-toggle">
+                <a onclick="showRegisterForm()">Don't have an account? Register here</a>
+            </div>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="hidden">
+            <div class="form-group">
+                <label>Account Type</label>
+                <div class="user-type-selector">
+                    <div class="user-type-option active" data-type="teacher" onclick="selectUserType('teacher')">Teacher</div>
+                    <div class="user-type-option" data-type="student" onclick="selectUserType('student')">Student</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="registerUsername">Username</label>
+                <input type="text" id="registerUsername" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" name="password" required>
+            </div>
+            <button type="submit" class="btn">Register</button>
+            <div class="form-toggle">
+                <a onclick="showLoginForm()">Already have an account? Login here</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let selectedUserType = 'teacher';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already logged in
+            checkAuth();
+        });
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/me');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Redirect based on user type
+                    if (data.data.user_type === 'teacher') {
+                        window.location.href = '/teacher_dashboard.html';
+                    } else {
+                        window.location.href = '/student_dashboard.html';
+                    }
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+            }
+        }
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const loginData = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Login successful!', 'success');
+                    
+                    // Redirect based on user type
+                    setTimeout(() => {
+                        if (data.data.user_type === 'teacher') {
+                            window.location.href = '/teacher_dashboard.html';
+                        } else {
+                            window.location.href = '/student_dashboard.html';
+                        }
+                    }, 1000);
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+                showAlert('Login failed. Please try again.', 'error');
+            }
+        });
+
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const registerData = {
+                name: formData.get('name'),
+                username: formData.get('username'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                user_type: selectedUserType
+            };
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(registerData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Registration successful! Please login.', 'success');
+                    setTimeout(() => {
+                        showLoginForm();
+                    }, 1500);
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Registration failed:', error);
+                showAlert('Registration failed. Please try again.', 'error');
+            }
+        });
+
+        // Show login form
+        function showLoginForm() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+        }
+
+        // Show register form
+        function showRegisterForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+
+        // Select user type
+        function selectUserType(type) {
+            selectedUserType = type;
+            
+            // Update UI
+            document.querySelectorAll('.user-type-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('active');
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            // Remove existing alerts
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.login-container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

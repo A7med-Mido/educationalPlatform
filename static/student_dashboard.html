@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Platform - Student Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #4facfe;
+            padding-bottom: 0.5rem;
+        }
+
+        .teacher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .teacher-card {
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .teacher-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .teacher-username {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .video-teacher {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .subscription-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .subscription-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+
+        .subscription-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .subscription-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e1e1e1;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            border-bottom-color: #4facfe;
+            color: #4facfe;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Student Dashboard</h1>
+        <p>Discover and watch educational content</p>
+    </div>
+
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('videos')">My Videos</div>
+                <div class="tab" onclick="switchTab('teachers')">Browse Teachers</div>
+                <div class="tab" onclick="switchTab('subscriptions')">My Subscriptions</div>
+            </div>
+        </div>
+
+        <!-- Videos Tab -->
+        <div id="videos-tab" class="tab-content active">
+            <div class="section">
+                <h2>Available Videos</h2>
+                <div class="video-grid" id="videoGrid">
+                    <div class="loading">Loading videos...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teachers Tab -->
+        <div id="teachers-tab" class="tab-content">
+            <div class="section">
+                <h2>Available Teachers</h2>
+                <div class="teacher-grid" id="teacherGrid">
+                    <div class="loading">Loading teachers...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscriptions Tab -->
+        <div id="subscriptions-tab" class="tab-content">
+            <div class="section">
+                <h2>My Subscriptions</h2>
+                <div class="subscription-list" id="subscriptionList">
+                    <div class="loading">Loading subscriptions...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let subscriptions = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadDashboard();
+        });
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/me');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                currentUser = data.data;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            await loadSubscriptions();
+            await loadVideos();
+            await loadTeachers();
+        }
+
+        // Load subscriptions
+        async function loadSubscriptions() {
+            try {
+                const response = await fetch('/api/student/subscriptions');
+                const data = await response.json();
+                
+                if (data.success) {
+                    subscriptions = data.data;
+                    displaySubscriptions(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to load subscriptions:', error);
+            }
+        }
+
+        // Load videos
+        async function loadVideos() {
+            try {
+                const response = await fetch('/api/student/videos');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayVideos(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to load videos:', error);
+            }
+        }
+
+        // Load teachers
+        async function loadTeachers() {
+            try {
+                const response = await fetch('/api/teachers');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayTeachers(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to load teachers:', error);
+            }
+        }
+
+        // Display videos
+        function displayVideos(videos) {
+            const videoGrid = document.getElementById('videoGrid');
+            
+            if (videos.length === 0) {
+                videoGrid.innerHTML = '<p>No videos available. Subscribe to teachers to see their content.</p>';
+                return;
+            }
+
+            videoGrid.innerHTML = videos.map(video => `
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        ${video.thumbnail_path ? 
+                            `<img src="/api/video/${video.id}/thumbnail" alt="Thumbnail" style="width: 100%; height: 100%; object-fit: cover;">` :
+                            'No Thumbnail'
+                        }
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <div class="video-teacher">by ${video.teacher_name}</div>
+                        <div class="video-description">${video.description || 'No description'}</div>
+                        <div class="video-actions">
+                            <button class="btn btn-small" onclick="watchVideo(${video.id})">Watch Video</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display teachers
+        function displayTeachers(teachers) {
+            const teacherGrid = document.getElementById('teacherGrid');
+            
+            if (teachers.length === 0) {
+                teacherGrid.innerHTML = '<p>No teachers available.</p>';
+                return;
+            }
+
+            teacherGrid.innerHTML = teachers.map(teacher => {
+                const isSubscribed = subscriptions.some(sub => sub.teacher_id === teacher.id);
+                
+                return `
+                    <div class="teacher-card">
+                        <div class="teacher-name">${teacher.name}</div>
+                        <div class="teacher-username">@${teacher.username}</div>
+                        <button class="btn ${isSubscribed ? 'btn-danger' : ''}" 
+                                onclick="${isSubscribed ? `unsubscribeFromTeacher(${teacher.id})` : `subscribeToTeacher(${teacher.id})`}">
+                            ${isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Display subscriptions
+        function displaySubscriptions(subscriptions) {
+            const subscriptionList = document.getElementById('subscriptionList');
+            
+            if (subscriptions.length === 0) {
+                subscriptionList.innerHTML = '<p>No subscriptions yet. Browse teachers to subscribe.</p>';
+                return;
+            }
+
+            subscriptionList.innerHTML = subscriptions.map(sub => `
+                <div class="subscription-item">
+                    <div class="subscription-info">
+                        <h4>${sub.teacher_name}</h4>
+                        <p>Subscribed on ${new Date(sub.subscribed_at).toLocaleDateString()}</p>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="unsubscribeFromTeacher(${sub.teacher_id})">
+                        Unsubscribe
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Subscribe to teacher
+        async function subscribeToTeacher(teacherId) {
+            try {
+                const response = await fetch(`/api/student/subscribe/${teacherId}`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Successfully subscribed to teacher!', 'success');
+                    loadDashboard(); // Refresh all data
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Subscribe failed:', error);
+                showAlert('Subscribe failed. Please try again.', 'error');
+            }
+        }
+
+        // Unsubscribe from teacher
+        async function unsubscribeFromTeacher(teacherId) {
+            if (!confirm('Are you sure you want to unsubscribe from this teacher?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/student/unsubscribe/${teacherId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Successfully unsubscribed from teacher!', 'success');
+                    loadDashboard(); // Refresh all data
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Unsubscribe failed:', error);
+                showAlert('Unsubscribe failed. Please try again.', 'error');
+            }
+        }
+
+        // Watch video
+        async function watchVideo(videoId) {
+            try {
+                // Record the view
+                await fetch(`/api/student/watch/${videoId}`, {
+                    method: 'POST'
+                });
+                
+                // Open video in new tab
+                window.open(`/api/video/${videoId}`, '_blank');
+            } catch (error) {
+                console.error('Watch video failed:', error);
+                showAlert('Failed to load video. Please try again.', 'error');
+            }
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

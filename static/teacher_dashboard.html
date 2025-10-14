@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Platform - Teacher Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .upload-form {
+            display: grid;
+            gap: 1rem;
+            max-width: 600px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .student-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+
+        .student-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .student-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Teacher Dashboard</h1>
+        <p>Manage your educational content and students</p>
+    </div>
+
+    <div class="container">
+        <!-- Stats Section -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalVideos">-</div>
+                <div class="stat-label">Total Videos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalStudents">-</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalViews">-</div>
+                <div class="stat-label">Total Views</div>
+            </div>
+        </div>
+
+        <!-- Upload Video Section -->
+        <div class="section">
+            <h2>Upload New Video</h2>
+            <form class="upload-form" id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Video Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="video">Video File</label>
+                    <input type="file" id="video" name="video" accept="video/*" required>
+                </div>
+                <button type="submit" class="btn">Upload Video</button>
+            </form>
+        </div>
+
+        <!-- Videos Section -->
+        <div class="section">
+            <h2>Your Videos</h2>
+            <div class="video-grid" id="videoGrid">
+                <div class="loading">Loading videos...</div>
+            </div>
+        </div>
+
+        <!-- Students Section -->
+        <div class="section">
+            <h2>Your Students</h2>
+            <div class="student-list" id="studentList">
+                <div class="loading">Loading students...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadDashboard();
+        });
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/me');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                currentUser = data.data;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/api/teacher/dashboard');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateStats(data.data);
+                    loadVideos();
+                    loadStudents();
+                }
+            } catch (error) {
+                console.error('Failed to load dashboard:', error);
+            }
+        }
+
+        // Update statistics
+        function updateStats(stats) {
+            document.getElementById('totalVideos').textContent = stats.total_videos;
+            document.getElementById('totalStudents').textContent = stats.total_students;
+            document.getElementById('totalViews').textContent = stats.total_views;
+        }
+
+        // Load videos
+        async function loadVideos() {
+            try {
+                const response = await fetch('/api/teacher/videos');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayVideos(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to load videos:', error);
+            }
+        }
+
+        // Display videos
+        function displayVideos(videos) {
+            const videoGrid = document.getElementById('videoGrid');
+            
+            if (videos.length === 0) {
+                videoGrid.innerHTML = '<p>No videos uploaded yet.</p>';
+                return;
+            }
+
+            videoGrid.innerHTML = videos.map(video => `
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        ${video.thumbnail_path ? 
+                            `<img src="/api/video/${video.id}/thumbnail" alt="Thumbnail" style="width: 100%; height: 100%; object-fit: cover;">` :
+                            'No Thumbnail'
+                        }
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <div class="video-description">${video.description || 'No description'}</div>
+                        <div class="video-actions">
+                            <button class="btn btn-small" onclick="watchVideo(${video.id})">Watch</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteVideo(${video.id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load students
+        async function loadStudents() {
+            try {
+                const response = await fetch('/api/teacher/students');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayStudents(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to load students:', error);
+            }
+        }
+
+        // Display students
+        function displayStudents(subscriptions) {
+            const studentList = document.getElementById('studentList');
+            
+            if (subscriptions.length === 0) {
+                studentList.innerHTML = '<p>No students subscribed yet.</p>';
+                return;
+            }
+
+            studentList.innerHTML = subscriptions.map(sub => `
+                <div class="student-item">
+                    <div class="student-info">
+                        <h4>${sub.student_name}</h4>
+                        <p>Subscribed on ${new Date(sub.subscribed_at).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Upload video
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('video', document.getElementById('video').files[0]);
+
+            try {
+                const response = await fetch('/api/teacher/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Video uploaded successfully!', 'success');
+                    document.getElementById('uploadForm').reset();
+                    loadVideos();
+                    loadDashboard(); // Refresh stats
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Upload failed:', error);
+                showAlert('Upload failed. Please try again.', 'error');
+            }
+        });
+
+        // Delete video
+        async function deleteVideo(videoId) {
+            if (!confirm('Are you sure you want to delete this video?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/teacher/videos/${videoId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Video deleted successfully!', 'success');
+                    loadVideos();
+                    loadDashboard(); // Refresh stats
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Delete failed:', error);
+                showAlert('Delete failed. Please try again.', 'error');
+            }
+        }
+
+        // Watch video
+        function watchVideo(videoId) {
+            window.open(`/api/video/${videoId}`, '_blank');
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
