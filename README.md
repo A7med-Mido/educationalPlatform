@@ -1,6 +1,6 @@
-# Educational Platform MVP
+# Educational Platform API
 
-A simple educational platform built with Go and Fiber that allows teachers to upload videos and students to subscribe and watch content.
+A backend-only REST API built with Go and Fiber that allows teachers to upload videos and students to subscribe and watch content.
 
 ## Features
 
@@ -51,10 +51,10 @@ A simple educational platform built with Go and Fiber that allows teachers to up
    go run .
    ```
 
-4. **Access the Platform**:
-   - Login Page: http://localhost:3000/login.html
-   - Teacher Dashboard: http://localhost:3000/teacher_dashboard.html
-   - Student Dashboard: http://localhost:3000/student_dashboard.html
+4. **Access the API**:
+   - API Base URL: http://localhost:3000/api
+   - Health Check: http://localhost:3000/health
+   - API Documentation: http://localhost:3000/
 
 ## Usage
 

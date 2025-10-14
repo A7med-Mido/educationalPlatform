@@ -47,7 +47,7 @@ func main() {
 		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
 	}))
 
-	// API Routes - These must come BEFORE any catch-all routes
+	// API Routes
 	api := app.Group("/api")
 
 	// Authentication routes
@@ -82,20 +82,35 @@ func main() {
 	api.Get("/video/:id", handlers.ServeVideoHandler)
 	api.Get("/video/:id/thumbnail", handlers.ServeThumbnailHandler)
 
-	// Static file routes - These come AFTER API routes
-	app.Get("/login.html", func(c fiber.Ctx) error {
-		return c.SendFile("./static/login.html")
-	})
-	app.Get("/teacher_dashboard.html", func(c fiber.Ctx) error {
-		return c.SendFile("./static/teacher_dashboard.html")
-	})
-	app.Get("/student_dashboard.html", func(c fiber.Ctx) error {
-		return c.SendFile("./static/student_dashboard.html")
+	// Health check endpoint
+	app.Get("/health", func(c fiber.Ctx) error {
+		return c.JSON(models.APIResponse{
+			Success: true,
+			Message: "Educational Platform API is running",
+			Data: map[string]interface{}{
+				"version": "1.0.0",
+				"status":  "healthy",
+			},
+		})
 	})
 
-	// Default route - This comes LAST
+	// API documentation endpoint
 	app.Get("/", func(c fiber.Ctx) error {
-		return c.Redirect("/login.html")
+		return c.JSON(models.APIResponse{
+			Success: true,
+			Message: "Educational Platform API",
+			Data: map[string]interface{}{
+				"version":    "1.0.0",
+				"endpoints": map[string]interface{}{
+					"authentication": "/api/auth",
+					"teachers":       "/api/teacher",
+					"students":       "/api/student",
+					"public":         "/api/teachers, /api/video",
+					"health":         "/health",
+				},
+				"documentation": "See README.md for API documentation",
+			},
+		})
 	})
 
 	// Start server
@@ -104,11 +119,10 @@ func main() {
 		port = "3000"
 	}
 
-	fmt.Printf("🚀 Educational Platform server starting on port %s\n", port)
-	fmt.Println("📚 Teacher Dashboard: http://localhost:" + port + "/teacher_dashboard.html")
-	fmt.Println("🎓 Student Dashboard: http://localhost:" + port + "/student_dashboard.html")
-	fmt.Println("🔐 Login Page: http://localhost:" + port + "/login.html")
+	fmt.Printf("🚀 Educational Platform API server starting on port %s\n", port)
 	fmt.Println("🔗 API Base URL: http://localhost:" + port + "/api")
+	fmt.Println("❤️  Health Check: http://localhost:" + port + "/health")
+	fmt.Println("📚 API Documentation: http://localhost:" + port + "/")
 
 	log.Fatal(app.Listen(":" + port))
 }

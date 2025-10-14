@@ -26,7 +26,6 @@ go.work
 educational_platform.db
 
 # Upload directories (user-generated content)
-uploads/
 uploads/videos/*
 uploads/thumbnails/*
 !uploads/videos/.gitkeep
@@ -233,11 +232,3 @@ $RECYCLE.BIN/
 .directory
 .Trash-*
 .nfs*
-
-# Keep important directories but ignore their contents
-!uploads/
-uploads/*
-!uploads/videos/
-uploads/videos/*
-!uploads/thumbnails/
-uploads/thumbnails/*

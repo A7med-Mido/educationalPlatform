@@ -35,10 +35,10 @@ else
 fi
 
 # Start the server
-echo "🌐 Starting server on http://localhost:3000"
-echo "📚 Teacher Dashboard: http://localhost:3000/teacher_dashboard.html"
-echo "🎓 Student Dashboard: http://localhost:3000/student_dashboard.html"
-echo "🔐 Login Page: http://localhost:3000/login.html"
+echo "🌐 Starting API server on http://localhost:3000"
+echo "🔗 API Base URL: http://localhost:3000/api"
+echo "❤️  Health Check: http://localhost:3000/health"
+echo "📚 API Documentation: http://localhost:3000/"
 echo ""
 echo "Press Ctrl+C to stop the server"
 echo ""
